@@ -1,4 +1,4 @@
-# SpringBoot2
+# 스프링부트 토이프로젝트
 도메인 모델 패턴, Java, Springboot, JPA, Lombok,
 
 <h2>ver.2 결제창 추가 </h2>
