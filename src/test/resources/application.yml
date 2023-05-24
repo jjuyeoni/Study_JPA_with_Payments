@@ -1,0 +1,21 @@
+# 테스트용 DB
+
+spring:
+#  datasource:
+#    url: jdbc:h2:mem:test
+#    username: sa
+#    password:
+#      driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create # 자동 테이블 생성 모드
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+# 스프링 부트는 기본적인 db 설정이 없으면 메모리로 돌려버림 -> 다 주석처리 해도 상관없음.
+
+logging.level:
+  org.hibernate.SQL: debug # hibernate가 생성하는 SQL log통해 확인 가능
+#  org.hibernate.orm.jdbc.bind: trace
