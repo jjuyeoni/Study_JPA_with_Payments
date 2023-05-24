@@ -3,7 +3,6 @@ package com.jpabook.jpashop.Repository;
 import com.jpabook.jpashop.domain.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberRepository {
 
-    @PersistenceContext // spring 이 entitymanager 주입해줌
+    @PersistenceContext // spring 이 entity manager 주입해줌
     private final EntityManager em;
 
     // managerFactory 직접 주입 받고 싶은 경우

@@ -3,9 +3,7 @@ package com.jpabook.jpashop.service;
 import com.jpabook.jpashop.Repository.MemberRepository;
 import com.jpabook.jpashop.domain.Member;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional; //spring이 제공하는 걸 쓰는걸 권장.
 
