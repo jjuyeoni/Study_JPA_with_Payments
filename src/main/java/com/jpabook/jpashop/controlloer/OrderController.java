@@ -60,4 +60,14 @@ public class OrderController {
 
         return "redirect:/orders";
     }
+
+    @GetMapping("/orders/payment")
+    public String paymentForm(Model model){
+        return "order/payment";
+    }
+
+    @GetMapping("/orders/payment/charge")
+    public @ResponseBody void paymentForm(Long amount){
+        System.out.println("가격은 : " + amount);
+    }
 }
