@@ -25,19 +25,20 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAllByString(OrderSearch orderSearch){
+
+    public List<Order> findAllByString(OrderSearch orderSearch) {
 
         // 정적 쿼리
-        return em.createQuery("select o from Order o join o.member m" +
-                " where o.status = :status" +
-                " and m.name like :name", Order.class)
-                .setParameter("status",orderSearch.getOrderStatus())
-                .setParameter("name",orderSearch.getMemberName())
-//                .setFirstResult(100) // for paging
-                .setMaxResults(1000)  // 최대 1000건
-                .getResultList();
+//        return em.createQuery("select o from Order o join o.member m" +
+//                " where o.status = :status" +
+//                " and m.name like :name", Order.class)
+//                .setParameter("status",orderSearch.getOrderStatus())
+//                .setParameter("name",orderSearch.getMemberName())
+////                .setFirstResult(100) // for paging
+//                .setMaxResults(1000)  // 최대 1000건
+//                .getResultList();
 
-        /*** 동적 쿼리 1번째 방법 -> 실무에서는 사용 잘 안함.
+        // 동적 쿼리 1번째 방법 -> 실무에서는 사용 잘 안함.
 
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
@@ -63,14 +64,13 @@ public class OrderRepository {
         }
         TypedQuery<Order> query = em.createQuery(jpql, Order.class)
                 .setMaxResults(1000); //최대 1000건
-
         if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
         if (StringUtils.hasText(orderSearch.getMemberName())) {
             query = query.setParameter("name", orderSearch.getMemberName());
         }
-         */
+        return query.getResultList();
     }
 
     // 동적쿼리 2번째 방법 - jpa criteria (이것도 no 권장)

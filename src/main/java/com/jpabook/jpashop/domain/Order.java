@@ -62,7 +62,7 @@ public class Order {
             order.addOrderItem(orderItem);
         }
 
-        order.setStatus(OrderStatus.Order);
+        order.setStatus(OrderStatus.ORDER);
         order.setOrderDate(LocalDateTime.now());
 
         return order;
@@ -75,7 +75,7 @@ public class Order {
             throw new IllegalStateException("이미 배송 완료된 상품은 취소가 불가능합니다.");
         }
 
-        this.setStatus(OrderStatus.Cancel); // 주문취소 상태로 변경
+        this.setStatus(OrderStatus.CANCEL); // 주문취소 상태로 변경
         for(OrderItem orderItem:orderItems){
             orderItem.cancel();
         }

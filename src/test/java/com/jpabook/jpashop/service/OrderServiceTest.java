@@ -48,7 +48,7 @@ public class OrderServiceTest {
         //then
         Order getOrder = orderRepository.findOrder(orderId);
 
-        assertEquals(OrderStatus.Order, getOrder.getStatus(), "상품 주문시 상태는 Order");
+        assertEquals(OrderStatus.ORDER, getOrder.getStatus(), "상품 주문시 상태는 Order");
         assertEquals(1, getOrder.getOrderItems().size(),"주문한 상품 종류 수가 정확해야 한다.");
         assertEquals(10000*orderCount, getOrder.getTotalPrice(),"주문 가격은 가격 * 수량이다.");
         assertEquals(8, book.getStockQuantity(),"주문 수량만큼 재고가 줄어야 한다.");
@@ -89,7 +89,7 @@ public class OrderServiceTest {
 
         //then
         Order getOrder = orderRepository.findOrder(orderId);
-        assertEquals(OrderStatus.Cancel, getOrder.getStatus(),"주문 취소시 상태는 Cancel 이다.");
+        assertEquals(OrderStatus.CANCEL, getOrder.getStatus(),"주문 취소시 상태는 Cancel 이다.");
         assertEquals(10, book.getStockQuantity(),"주문이 취소된 상품은 그만큼 재고가 증가해야 한다.");
 
     }

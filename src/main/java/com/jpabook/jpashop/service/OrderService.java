@@ -4,10 +4,8 @@ package com.jpabook.jpashop.service;
 import com.jpabook.jpashop.Repository.ItemRepository;
 import com.jpabook.jpashop.Repository.MemberRepository;
 import com.jpabook.jpashop.Repository.OrderRepository;
-import com.jpabook.jpashop.domain.Delivery;
-import com.jpabook.jpashop.domain.Member;
-import com.jpabook.jpashop.domain.Order;
-import com.jpabook.jpashop.domain.OrderItem;
+import com.jpabook.jpashop.Repository.OrderSearch;
+import com.jpabook.jpashop.domain.*;
 import com.jpabook.jpashop.domain.item.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ public class OrderService {
     private final ItemRepository itemRepository;
 
     // 주문
-    @Transactional
+    @Transactional(readOnly = false)
     public Long order(Long memberId, Long itemId, int count){
 
         // 엔티티 조회
@@ -35,6 +33,7 @@ public class OrderService {
         // 배송정보 생성
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress()); // 주문 받을때 배송지 변경 염두하여 추후 수정 예정
+        delivery.setStatus(DeliveryStatus.READY);
 
         // 주문상품 생성 -> 주문 상품은 하나만 선택할 수 있도록 제약(추후 개선)
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
@@ -59,7 +58,7 @@ public class OrderService {
     }
 
     // 주문 검색
-//    public List<Order> findOrders(OrderSearch orderSearch){
-//
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch){
+        return orderRepository.findAllByString(orderSearch);
+    }
 }
