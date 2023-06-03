@@ -1,4 +1,4 @@
-package com.jpabook.jpashop.controlloer;
+package com.jpabook.jpashop.controller;
 
 
 import jakarta.validation.constraints.NotEmpty;
