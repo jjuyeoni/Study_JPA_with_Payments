@@ -9,12 +9,59 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 //@Controller + @ResponseBody = @RestController
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    @GetMapping("/api/v1/members")
+    public List<Member> memberV1(){
+        return memberService.findMembers();
+        /**
+         * 잘못된 API
+         이렇게 짜면 entity에 있는 정보들이 모두 공개가 됨
+
+         Entity class에
+         @JsonIgnore <- 어노테이션을 사용하면 필요없는 정보는 제외되고 출력되지만
+         private List<Order> order = new ArrayList<>();
+
+         1. 이렇게 되면 entity에 의존관계가 나가게 되면서 양방향 의존관계가 걸림
+         -> application 수정이 어렵게 됨.
+
+         2. 만약 entity의 변수가 변경될 경우, api 스펙이 변경되어 버림.
+         ex. name -> username으로 변경될 경우, 응답 스펙이 맞도록 api가 또 변경되어야함.
+
+         3. 이 경우 Array로 넘어오기 때문에 스펙 확장이 불가능함. (유연성이 떨어짐)
+         */
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2(){
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDTO> collect = findMembers.stream()
+                .map(m -> new MemberDTO(m.getName()))
+                .collect(Collectors.toList());
+
+        return new Result(collect.size(),collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T>{
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDTO{
+        private String name;
+    }
 
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member){
