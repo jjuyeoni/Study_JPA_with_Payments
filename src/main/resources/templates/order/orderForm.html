@@ -4,7 +4,7 @@
 <body>
 <div class="container">
   <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-  <form role="form" action="/order" method="post">
+  <form role="form" action="/order" method="post" id="orderForm">
     <div class="form-group">
       <label for="member">주문회원</label>
       <select name="memberId" id="member" class="form-control">
@@ -13,6 +13,7 @@
                 th:value="${member.id}"
                 th:text="${member.name}" />
       </select>
+
     </div>
     <div class="form-group">
       <label for="item">상품명</label>
@@ -20,7 +21,8 @@
         <option value="">상품선택</option>
         <option th:each="item : ${items}"
                 th:value="${item.id}"
-                th:text="${item.name}" />
+                th:utext="${item.name + ' (' + item.price + '원)'}"
+                th:data-price="${item.price}" />
       </select>
     </div>
     <div class="form-group">
@@ -28,10 +30,52 @@
       <input type="number" name="count" class="form-control" id="count"
              placeholder="주문 수량을 입력하세요">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-primary" onclick="request_pay()">Submit</button>
   </form>
   <br/>
   <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
 </html>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var IMP = window.IMP;
+  IMP.init('imp15352200');
+
+  function request_pay() {
+    var selectedItem = document.getElementById("item");
+    var selectedItemId = selectedItem.value;
+    var selectedOption = selectedItem.options[selectedItem.selectedIndex];
+    var itemPrice = selectedOption.getAttribute("data-price");
+    var itemCount = document.getElementById("count").value;
+
+    var orderForm = document.getElementById('orderForm');
+    var formData = new FormData(orderForm);
+
+    IMP.request_pay({
+      pg: 'kakaopay',
+      pay_method: 'card',
+      merchant_uid: 'merchant_' + new Date().getTime(),
+      name: '결제',
+      amount: itemPrice * itemCount,
+      buyer_email: '구매자 이메일',
+      buyer_name: '구매자 이름',
+      buyer_tel: '구매자 번호',
+      buyer_addr: '구매자 주소',
+      buyer_postcode: '구매자 우편번호',
+      m_redirect_url: '리다이렉트 URL'
+    }, function(rsp) {
+      if (rsp.success) {
+        var msg = '결제가 완료되었습니다.';
+        orderForm.submit(); // form submit
+      } else {
+        var msg = '결제에 실패하였습니다.';
+        rsp.error_msg;
+      }
+    });
+
+    event.preventDefault();
+  }
+  /*]]>*/
+</script>
