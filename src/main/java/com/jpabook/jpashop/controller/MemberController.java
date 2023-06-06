@@ -35,14 +35,33 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
+        if (!form.getPassword1().equals(form.getPassword2())) {
+            result.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "members/createMemberForm";
+        }
+
         Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
 
         Member member = new Member();
-        member.setName(form.getName());
+        member.setUsername(form.getUsername());
+        member.setEmail(form.getEmail());
+        member.setPassword(form.getPassword1());
         member.setAddress(address);
-
-        memberService.join(member);
+        member.setRole("ROLE_USER");
+        try{
+            memberService.join(member);
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+            result.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "members/createMemberForm";
+        }
         return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "members/loginForm";
     }
 
     @GetMapping("/members")
@@ -52,4 +71,5 @@ public class MemberController {
 
         return "members/memberList";
     }
+
 }

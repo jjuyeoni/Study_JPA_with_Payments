@@ -44,7 +44,7 @@ public class MemberApiController {
     public Result memberV2(){
         List<Member> findMembers = memberService.findMembers();
         List<MemberDTO> collect = findMembers.stream()
-                .map(m -> new MemberDTO(m.getName()))
+                .map(m -> new MemberDTO(m.getUsername()))
                 .collect(Collectors.toList());
 
         return new Result(collect.size(),collect);
@@ -73,7 +73,7 @@ public class MemberApiController {
     @PostMapping("/api/v2/members")
     public CreateMemberResponse saveMemberV2(@RequestBody @Valid CreateMemberRequest request){
         Member member = new Member();
-        member.setName(request.getName());
+        member.setUsername(request.getName());
 
         Long id = memberService.join(member);
         return new CreateMemberResponse(id);
@@ -90,7 +90,7 @@ public class MemberApiController {
         // update에서 member을 반환하지 않게 짠 이유는 command와 query를 분리하기 위해서
         // 이건 개발 스타일에 따라 다름 => 위 방법이 유지보수성에 좋음
 
-        return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+        return new UpdateMemberResponse(findMember.getId(), findMember.getUsername());
     }
 
     @Data

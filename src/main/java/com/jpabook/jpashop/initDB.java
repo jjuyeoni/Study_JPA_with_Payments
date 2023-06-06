@@ -37,7 +37,7 @@ public class initDB {
     static class InitService{
         private final EntityManager em;
         public void dbInit1(){
-            Member member = createMember("userA", "서울","1","1111");
+            Member member = createMember("userA", "normal1@example.com", "1234", "서울","1","1111");
             em.persist(member);
 
             Book book1 = createBook("JPA1 BOOK", 10000, 100);
@@ -55,7 +55,7 @@ public class initDB {
         }
 
         public void dbInit2(){
-            Member member = createMember("userB", "부산","2","2222");
+            Member member = createMember("userB", "normal2@example.com", "1234", "부산","2","2222");
             em.persist(member);
 
             Book book1 = createBook("SPRING1 BOOK", 20000, 200);
@@ -86,9 +86,11 @@ public class initDB {
             return delivery;
         }
 
-        private Member createMember(String name, String city, String street, String zipcode) {
+        private Member createMember(String name, String email, String password, String city, String street, String zipcode) {
             Member member = new Member();
-            member.setName(name);
+            member.setUsername(name);
+            member.setEmail(email);
+            member.setPassword(password);
             member.setAddress(new Address(city,street,zipcode));
             return member;
         }
